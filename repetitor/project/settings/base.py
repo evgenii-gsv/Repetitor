@@ -27,6 +27,9 @@ INSTALLED_APPS = [
 
     # Apps
     'repetitor.accounts.apps.AccountsConfig',
+    'repetitor.schedule.apps.ScheduleConfig',
+    'repetitor.balance.apps.BalanceConfig',
+    'repetitor.clients.apps.ClientsConfig',
 
     # django-cleanup
     'django_cleanup.apps.CleanupConfig',

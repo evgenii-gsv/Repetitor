@@ -44,3 +44,11 @@ superuser:
 run-production:
 	test -f .env || touch .env
 	docker compose down; docker compose build; docker compose up -d --force-recreate
+
+.PHONY: test
+test:
+	poetry run pytest -v -rs -n auto --show-capture=no
+
+.PHONY: test-detailed
+test-detailed:
+	poetry run pytest -vv -rs -s
