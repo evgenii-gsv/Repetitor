@@ -37,7 +37,7 @@ multi_line_output = 5
 DJANGO_SETTINGS_MODULE = "repetitor.project.settings"
 django_find_project = false
 python_files = "test_*.py"
-testpaths = ["repetitor"]
+testpaths = ["tests"]
 filterwarnings = "ignore::DeprecationWarning:^(?!node\\.).*:"
 
 [tool.yapf]
