@@ -12,3 +12,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         schedule = self.request.user.schedule  # type: ignore
         return Appointment.objects.filter(schedule=schedule)
+
+    def perform_create(self, serializer):
+        schedule = self.request.user.schedule  # type: ignore
+        serializer.save(schedule=schedule)
