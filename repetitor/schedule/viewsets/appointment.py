@@ -1,8 +1,8 @@
-from rest_framework import viewsets, permissions
+from rest_framework import permissions, viewsets
 
-from ..serializers import AppointmentSerializer
 from ..models import Appointment
 from ..permissions import IsOwnerOfSchedule
+from ..serializers import AppointmentSerializer
 
 
 class AppointmentViewSet(viewsets.ModelViewSet):
@@ -12,7 +12,3 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         schedule = self.request.user.schedule  # type: ignore
         return Appointment.objects.filter(schedule=schedule)
-
-    def perform_create(self, serializer):
-        schedule = self.request.user.schedule  # type: ignore
-        serializer.save(schedule=schedule)
