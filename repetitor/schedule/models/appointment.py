@@ -15,6 +15,6 @@ class Appointment(TimeStampedModel):
     def duration(self):
         delta = self.start - self.end
         return (delta.days * 24 * 3600 + delta.seconds) // 60
-    
+
     def get_absolute_url(self):
         return reverse('appointment-detail', kwargs={'pk': self.pk})

@@ -1,7 +1,7 @@
 import pytest
-from rest_framework import status
 from django.urls import reverse
 from model_bakery import baker
+from rest_framework import status
 
 
 class TestAppointmentViews:
@@ -21,25 +21,12 @@ class TestAppointmentViews:
         assert len(response.data) == 0
 
         # creating appointments
+        baker.make('schedule.Appointment', schedule=user.schedule, start='2024-07-25T13:00', end='2024-07-25T14:00')
+        baker.make('schedule.Appointment', schedule=user.schedule, start='2024-07-25T14:00', end='2024-07-25T15:00')
         baker.make(
-            'schedule.Appointment',
-            schedule=user.schedule,
-            start='2024-07-25T13:00',
-            end='2024-07-25T14:00'
-            )
-        baker.make(
-            'schedule.Appointment',
-            schedule=user.schedule,
-            start='2024-07-25T14:00',
-            end='2024-07-25T15:00'
-            )
-        baker.make(
-            'schedule.Appointment',
-            schedule=second_user.schedule,
-            start='2024-07-25T13:00',
-            end='2024-07-25T14:00'
-            )
-        
+            'schedule.Appointment', schedule=second_user.schedule, start='2024-07-25T13:00', end='2024-07-25T14:00'
+        )
+
         response = client.get(url)
         assert len(response.data) == 2
 
@@ -69,7 +56,7 @@ class TestAppointmentViews:
             'end': '2024-07-25T13:30',
         }, format='json')
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        
+
         response = client.post(url, {
             'start': '2024-07-25T18:00',
             'end': '2024-07-25T17:00',
@@ -93,18 +80,30 @@ class TestAppointmentViews:
 
     @pytest.mark.db
     def test_update(self, client, user):
-        appointment = baker.make('schedule.Appointment', schedule=user.schedule, start='2024-07-25T13:00', end='2024-07-25T14:00')
+        appointment = baker.make(
+            'schedule.Appointment', schedule=user.schedule, start='2024-07-25T13:00', end='2024-07-25T14:00'
+        )
         client.force_authenticate(user=user)
 
-        response = client.put(appointment.get_absolute_url(), 
-                              {'start': '2024-07-25T13:30',
-                               'end': '2024-07-25T14:00'}, 
-                              format='json')
+        response = client.put(
+            appointment.get_absolute_url(), {
+                'start': '2024-07-25T13:30',
+                'end': '2024-07-25T14:00'
+            }, format='json'
+        )
         assert response.status_code == status.HTTP_200_OK
         assert response.data['start'] == '2024-07-25T13:30:00Z'
 
-        response = client.patch(appointment.get_absolute_url(), 
-                              {'end': '2024-07-25T14:30'}, 
-                              format='json')
+        response = client.patch(appointment.get_absolute_url(), {'end': '2024-07-25T14:30'}, format='json')
         assert response.status_code == status.HTTP_200_OK
         assert response.data['end'] == '2024-07-25T14:30:00Z'
+
+    @pytest.mark.db
+    def test_delete(self, client, user):
+        appointment = baker.make(
+            'schedule.Appointment', schedule=user.schedule, start='2024-07-25T13:00', end='2024-07-25T14:00'
+        )
+        client.force_authenticate(user=user)
+
+        response = client.delete(appointment.get_absolute_url())
+        assert response.status_code == status.HTTP_204_NO_CONTENT

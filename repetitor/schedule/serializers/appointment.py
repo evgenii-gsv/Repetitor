@@ -1,10 +1,9 @@
+import logging
+
 from rest_framework import serializers
 
 from ..models import Appointment
 from ..validators import EmptyWindowValidator, StartBeforeEndValidator
-
-import logging
-
 
 logger = logging.getLogger()
 
@@ -24,10 +23,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     schedule_id = serializers.HiddenField(default=CurrentScheduleIdDefault())
 
     def get_validators(self):
-        return [
-            StartBeforeEndValidator(instance=self.instance), 
-            EmptyWindowValidator(instance=self.instance)
-            ]
+        return [StartBeforeEndValidator(instance=self.instance), EmptyWindowValidator(instance=self.instance)]
 
     class Meta:
         model = Appointment
