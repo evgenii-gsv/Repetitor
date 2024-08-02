@@ -1,5 +1,5 @@
 from django_extensions.db.models import TimeStampedModel
 
 
-class Balance(TimeStampedModel):
+class Transaction(TimeStampedModel):
     pass
