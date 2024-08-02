@@ -1,8 +1,8 @@
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
-from .person import Person
 from .group import Group
+from .person import Person
 
 
 class Client(TimeStampedModel):
@@ -11,11 +11,11 @@ class Client(TimeStampedModel):
 
     def __str__(self) -> str:
         return f'{self.target}'
-    
+
     def save(self, **kwargs):
         assert [self.person, self.group].count(None) == 1, "Only 'group' or 'person' should be set"
         return super().save(**kwargs)
-    
+
     @property
     def target(self):
         if self.person_id is not None:  # type: ignore

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Client, Person, Group
+from .models import Client, Group, Person
 
 admin.site.register(Client)
 admin.site.register(Person)
